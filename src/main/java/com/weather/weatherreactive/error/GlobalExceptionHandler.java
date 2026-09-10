@@ -1,6 +1,5 @@
-package com.weather.weatherreactive.exception;
+package com.weather.weatherreactive.error;
 
-import com.weather.weatherreactive.dto.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.weather.weatherreactive.dto;
+package com.weather.weatherreactive.error;
 
 import java.time.Instant;
 
