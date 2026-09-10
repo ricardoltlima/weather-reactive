@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.reactive.function.client.WebClientRequestException;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.server.ServerWebInputException;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
@@ -36,6 +37,17 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_GATEWAY,
                 "WEATHER_API_UNAVAILABLE",
                 "Weather API is unavailable"
+        );
+    }
+
+    @ExceptionHandler(ServerWebInputException.class)
+    public Mono<ResponseEntity<ErrorResponse>> handleServerWebInputException(ServerWebInputException exception) {
+        log.error("Invalid request", exception);
+
+        return buildResponse(
+                HttpStatus.BAD_REQUEST,
+                "BAD_REQUEST",
+                "Invalid request"
         );
     }
 

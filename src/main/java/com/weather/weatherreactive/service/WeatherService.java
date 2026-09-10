@@ -2,7 +2,6 @@ package com.weather.weatherreactive.service;
 
 import com.weather.weatherreactive.client.WeatherClient;
 import com.weather.weatherreactive.dto.ForecastResponse;
-import com.weather.weatherreactive.dto.WeatherResponse;
 import com.weather.weatherreactive.mapper.WeatherMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,7 +27,7 @@ public class WeatherService {
         return client.getDailyForecast()
                 .map(response -> {
                     List<ForecastResponse.DailyForecast> daily = response.properties().periods().stream()
-                            .filter(period -> matchesDay(period, day))
+                            .filter(period -> period.name().equalsIgnoreCase(day))
                             .map(mapper::toDailyForecast)
                             .toList();
 
@@ -36,12 +35,5 @@ public class WeatherService {
 
                     return new ForecastResponse(daily);
                 });
-    }
-
-    private boolean matchesDay(WeatherResponse.Period period, String day) {
-        return day == null
-                || day.isBlank()
-                || period.name().equalsIgnoreCase(day)
-                || period.name().toLowerCase().contains(day.toLowerCase());
     }
 }
