@@ -1,0 +1,126 @@
+{
+  "info": {
+    "_postman_id": "14b0e519-52d3-48b6-948f-347a0647169a",
+    "name": "Weather Reactive",
+    "description": "Postman collection for the Weather Reactive API.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get forecast by valid day",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"returns 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"returns daily forecast array\", function () {",
+              "    const body = pm.response.json();",
+              "    pm.expect(body).to.have.property(\"daily\");",
+              "    pm.expect(body.daily).to.be.an(\"array\");",
+              "});",
+              "",
+              "pm.test(\"forecast items use expected response fields\", function () {",
+              "    const body = pm.response.json();",
+              "    if (body.daily.length === 0) {",
+              "        return;",
+              "    }",
+              "",
+              "    pm.expect(body.daily[0]).to.have.property(\"day_name\");",
+              "    pm.expect(body.daily[0]).to.have.property(\"temp_high_celsius\");",
+              "    pm.expect(body.daily[0]).to.have.property(\"forecast_blurp\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/forecast?day={{validDay}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "forecast"
+          ],
+          "query": [
+            {
+              "key": "day",
+              "value": "{{validDay}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Reject invalid day",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"returns 400 Bad Request\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "",
+              "pm.test(\"returns invalid date error code\", function () {",
+              "    const body = pm.response.json();",
+              "    pm.expect(body.code).to.eql(\"INVALID_DATE\");",
+              "});",
+              "",
+              "pm.test(\"message lists valid values\", function () {",
+              "    const body = pm.response.json();",
+              "    pm.expect(body.message).to.include(\"Invalid date. Valid values are:\");",
+              "    pm.expect(body.message).to.include(\"Today\");",
+              "    pm.expect(body.message).to.include(\"Monday Night\");",
+              "    pm.expect(body.message).to.include(\"Sunday Night\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/forecast?day={{invalidDay}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "forecast"
+          ],
+          "query": [
+            {
+              "key": "day",
+              "value": "{{invalidDay}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
