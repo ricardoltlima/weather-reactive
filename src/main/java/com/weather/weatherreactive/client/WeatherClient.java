@@ -11,8 +11,6 @@ import reactor.core.publisher.Mono;
 @Component
 public class WeatherClient {
 
-    private static final String USER_AGENT = "weather-reactive";
-
     private final String forecastUrl;
     private final WebClient webClient;
 
@@ -22,8 +20,6 @@ public class WeatherClient {
     ) {
         this.forecastUrl = forecastUrl;
         this.webClient = webClientBuilder
-                .defaultHeader(HttpHeaders.USER_AGENT, USER_AGENT)
-                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .build();
     }
 

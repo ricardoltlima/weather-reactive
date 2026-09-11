@@ -16,6 +16,17 @@ import java.time.Instant;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(InvalidDateException.class)
+    public Mono<ResponseEntity<ErrorResponse>> handleInvalidDateException(InvalidDateException exception) {
+        log.warn("Invalid date request: {}", exception.getMessage());
+
+        return buildResponse(
+                HttpStatus.BAD_REQUEST,
+                "INVALID_DATE",
+                exception.getMessage()
+        );
+    }
+
     @ExceptionHandler(WebClientResponseException.class)
     public Mono<ResponseEntity<ErrorResponse>> handleWebClientResponseException(WebClientResponseException exception) {
         HttpStatus status = HttpStatus.resolve(exception.getStatusCode().value());
