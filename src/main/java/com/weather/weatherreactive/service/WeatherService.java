@@ -4,6 +4,7 @@ import com.weather.weatherreactive.client.WeatherClient;
 import com.weather.weatherreactive.dto.ForecastResponse;
 import com.weather.weatherreactive.error.InvalidDateException;
 import com.weather.weatherreactive.mapper.WeatherMapper;
+import com.weather.weatherreactive.model.ForecastDay;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.weather.weatherreactive.error;
 
-import com.weather.weatherreactive.service.ForecastDay;
+import com.weather.weatherreactive.model.ForecastDay;
 
 public class InvalidDateException extends RuntimeException {
     public InvalidDateException() {

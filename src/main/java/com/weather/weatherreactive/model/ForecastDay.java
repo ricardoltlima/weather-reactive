@@ -1,4 +1,4 @@
-package com.weather.weatherreactive.service;
+package com.weather.weatherreactive.model;
 
 import java.util.Arrays;
 import java.util.Optional;
