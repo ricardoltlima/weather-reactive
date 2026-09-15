@@ -37,7 +37,7 @@ public class WeatherService {
         return client.getDailyForecast()
                 .map(response -> {
                     List<ForecastResponse.DailyForecast> daily = response.properties().periods().stream()
-                            .filter(period -> period.name().equalsIgnoreCase(forecastDay.label()))
+                            .filter(period -> forecastDay.label().equalsIgnoreCase(period.name()))
                             .map(mapper::toDailyForecast)
                             .toList();
 
