@@ -2,7 +2,9 @@ package com.weather.weatherreactive.service;
 
 import com.weather.weatherreactive.client.WeatherClient;
 import com.weather.weatherreactive.dto.ForecastResponse;
+import com.weather.weatherreactive.dto.WeatherResponse;
 import com.weather.weatherreactive.error.InvalidDateException;
+import com.weather.weatherreactive.error.InvalidWeatherApiResponseException;
 import com.weather.weatherreactive.mapper.WeatherMapper;
 import com.weather.weatherreactive.model.ForecastDay;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +38,7 @@ public class WeatherService {
 
         return client.getDailyForecast()
                 .map(response -> {
-                    List<ForecastResponse.DailyForecast> daily = response.properties().periods().stream()
+                    List<ForecastResponse.DailyForecast> daily = getPeriods(response).stream()
                             .filter(period -> period.name().equalsIgnoreCase(forecastDay.label()))
                             .map(mapper::toDailyForecast)
                             .toList();
@@ -53,5 +55,12 @@ public class WeatherService {
         }
 
         return ForecastDay.from(day.trim());
+    }
+
+    private List<WeatherResponse.Period> getPeriods(WeatherResponse response) {
+        return Optional.ofNullable(response)
+                .map(WeatherResponse::properties)
+                .map(WeatherResponse.Properties::periods)
+                .orElseThrow(InvalidWeatherApiResponseException::new);
     }
 }

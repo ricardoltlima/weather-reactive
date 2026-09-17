@@ -50,6 +50,30 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(WeatherApiTimeoutException.class)
+    public Mono<ResponseEntity<ErrorResponse>> handleWeatherApiTimeoutException(WeatherApiTimeoutException exception) {
+        log.error("Weather API request timed out", exception);
+
+        return buildResponse(
+                HttpStatus.GATEWAY_TIMEOUT,
+                "WEATHER_API_TIMEOUT",
+                exception.getMessage()
+        );
+    }
+
+    @ExceptionHandler(InvalidWeatherApiResponseException.class)
+    public Mono<ResponseEntity<ErrorResponse>> handleInvalidWeatherApiResponseException(
+            InvalidWeatherApiResponseException exception
+    ) {
+        log.error("Weather API returned an invalid response", exception);
+
+        return buildResponse(
+                HttpStatus.BAD_GATEWAY,
+                "WEATHER_API_INVALID_RESPONSE",
+                exception.getMessage()
+        );
+    }
+
     @ExceptionHandler(ServerWebInputException.class)
     public Mono<ResponseEntity<ErrorResponse>> handleServerWebInputException(ServerWebInputException exception) {
         log.error("Invalid request", exception);

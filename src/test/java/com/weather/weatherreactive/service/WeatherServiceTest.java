@@ -4,6 +4,8 @@ import com.weather.weatherreactive.client.WeatherClient;
 import com.weather.weatherreactive.dto.ForecastResponse;
 import com.weather.weatherreactive.dto.WeatherResponse;
 import com.weather.weatherreactive.error.InvalidDateException;
+import com.weather.weatherreactive.error.InvalidWeatherApiResponseException;
+import com.weather.weatherreactive.error.WeatherApiTimeoutException;
 import com.weather.weatherreactive.mapper.WeatherMapper;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -107,6 +109,48 @@ class WeatherServiceTest {
 
         StepVerifier.create(result)
                 .expectErrorSatisfies(error -> assertThat(error).isSameAs(exception))
+                .verify();
+    }
+
+    @Test
+    void getDailyForecastPropagatesWeatherApiTimeouts() {
+        WeatherApiTimeoutException exception = new WeatherApiTimeoutException();
+        when(client.getDailyForecast()).thenReturn(Mono.error(exception));
+
+        Mono<ForecastResponse> result = service.getDailyForecast("Monday");
+
+        StepVerifier.create(result)
+                .expectErrorSatisfies(error -> assertThat(error).isSameAs(exception))
+                .verify();
+    }
+
+    @Test
+    void getDailyForecastRejectsInvalidWeatherApiResponse() {
+        when(client.getDailyForecast()).thenReturn(Mono.just(new WeatherResponse(null)));
+
+        Mono<ForecastResponse> result = service.getDailyForecast("Monday");
+
+        StepVerifier.create(result)
+                .expectErrorSatisfies(error -> {
+                    assertThat(error).isInstanceOf(InvalidWeatherApiResponseException.class);
+                    assertThat(error).hasMessage("Weather API returned an invalid response");
+                })
+                .verify();
+    }
+
+    @Test
+    void getDailyForecastRejectsWeatherApiResponseWithoutPeriods() {
+        when(client.getDailyForecast()).thenReturn(Mono.just(new WeatherResponse(
+                new WeatherResponse.Properties(null)
+        )));
+
+        Mono<ForecastResponse> result = service.getDailyForecast("Monday");
+
+        StepVerifier.create(result)
+                .expectErrorSatisfies(error -> {
+                    assertThat(error).isInstanceOf(InvalidWeatherApiResponseException.class);
+                    assertThat(error).hasMessage("Weather API returned an invalid response");
+                })
                 .verify();
     }
 

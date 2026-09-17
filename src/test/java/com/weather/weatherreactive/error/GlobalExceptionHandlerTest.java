@@ -29,4 +29,36 @@ class GlobalExceptionHandlerTest {
                 })
                 .verifyComplete();
     }
+
+    @Test
+    void handleInvalidWeatherApiResponseExceptionReturnsBadGateway() {
+        Mono<ResponseEntity<ErrorResponse>> result = handler.handleInvalidWeatherApiResponseException(
+                new InvalidWeatherApiResponseException()
+        );
+
+        StepVerifier.create(result)
+                .assertNext(response -> {
+                    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_GATEWAY);
+                    assertThat(response.getBody()).isNotNull();
+                    assertThat(response.getBody().code()).isEqualTo("WEATHER_API_INVALID_RESPONSE");
+                    assertThat(response.getBody().message()).isEqualTo("Weather API returned an invalid response");
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    void handleWeatherApiTimeoutExceptionReturnsGatewayTimeout() {
+        Mono<ResponseEntity<ErrorResponse>> result = handler.handleWeatherApiTimeoutException(
+                new WeatherApiTimeoutException()
+        );
+
+        StepVerifier.create(result)
+                .assertNext(response -> {
+                    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.GATEWAY_TIMEOUT);
+                    assertThat(response.getBody()).isNotNull();
+                    assertThat(response.getBody().code()).isEqualTo("WEATHER_API_TIMEOUT");
+                    assertThat(response.getBody().message()).isEqualTo("Weather API request timed out");
+                })
+                .verifyComplete();
+    }
 }
