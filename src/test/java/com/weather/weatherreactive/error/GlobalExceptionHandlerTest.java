@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class GlobalExceptionHandlerTest {
 
-    private static final String INVALID_DATE_MESSAGE = "Invalid date. Valid values are: Today, Monday, Monday Night, "
+    private static final String INVALID_DATE_MESSAGE = "Invalid date. Valid values are: Today, Tonight, Monday, Monday Night, "
             + "Tuesday, Tuesday Night, Wednesday, Wednesday Night, Thursday, Thursday Night, Friday, Friday Night, "
             + "Saturday, Saturday Night, Sunday, Sunday Night";
 

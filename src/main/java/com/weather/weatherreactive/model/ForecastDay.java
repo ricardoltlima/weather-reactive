@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 public enum ForecastDay {
     TODAY("Today"),
+    TONIGHT("Tonight"),
     MONDAY("Monday"),
     MONDAY_NIGHT("Monday Night"),
     TUESDAY("Tuesday"),

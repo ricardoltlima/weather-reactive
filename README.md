@@ -2,6 +2,30 @@
 
 Reactive Spring Boot API that returns a simplified daily forecast from the National Weather Service forecast endpoint.
 
+## Goal
+
+Build a simple REST request implemented in Spring Boot reactive.
+
+The application calls this National Weather Service endpoint:
+
+```text
+https://api.weather.gov/gridpoints/MLB/33,70/forecast
+```
+
+It returns the following result structure for the requested forecast day:
+
+```json
+{
+  "daily": [
+    {
+      "day_name": "Monday",
+      "temp_high_celsius": 27.2,
+      "forecast_blurp": "Partly Sunny"
+    }
+  ]
+}
+```
+
 ## Requirements
 
 - Java 17
@@ -37,6 +61,7 @@ GET /api/v1/forecast?day=Monday
 The `day` query parameter is required. Valid values are:
 
 - `Today`
+- `Tonight`
 - `Monday`
 - `Monday Night`
 - `Tuesday`
