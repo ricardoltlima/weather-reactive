@@ -13,7 +13,7 @@ public interface WeatherMapper {
     @Mapping(target = "forecastBlurp", source = "shortForecast")
     ForecastResponse.DailyForecast toDailyForecast(WeatherResponse.Period period);
 
-    default double toCelsius(int temperature, String unit) {
+    default double toCelsius(double temperature, String unit) {
         if ("C".equalsIgnoreCase(unit)) {
             return temperature;
         }

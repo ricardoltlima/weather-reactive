@@ -12,7 +12,7 @@ public record WeatherResponse(
 
     public record Period(
             String name,
-            int temperature,
+            double temperature,
             String temperatureUnit,
             String shortForecast
     ) {
